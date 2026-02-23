@@ -135,8 +135,13 @@ Dashboard RRM Mali Coordination
 ### Période d'analyse
 
 ```{r parameter, echo=FALSE, message=FALSE, warning=FALSE }
-date_periode_prec <- as.Date("2025-01-01")
-date_periode_act <- as.Date("2025-12-31")
+date_periode_act <- as.Date("2026-02-23")
+
+date_periode_prec_month <- date_periode_act %m-% months(1)
+date_periode_prec_bim <- date_periode_act %m-% months(2)
+date_periode_prec_trim <- date_periode_act %m-% months(3)
+date_periode_prec_year <- date_periode_act %m-% years(1)
+
 year_ref <- year(date_periode_act)
 quarter_ref <- quarter(date_periode_act)
 bim_ref <- get_bimestre(date_periode_act)
@@ -145,10 +150,15 @@ month_ref_lab <- format(date_periode_act, "%B")
 
 ```
 
-La période d'analyse va de 
-<span style="color:red;">`r date_periode_prec`</span> 
-à 
-<span style="color:red;">`r date_periode_act`</span>.
+La période d'analyse mensuelle va de 
+<span style="color:red;">`r date_periode_prec_month`</span> à
+<span style="color:red;">`r date_periode_act`</span> . La période d'analyse bimensuelle va de 
+<span style="color:red;">`r date_periode_prec_bim`</span> à
+<span style="color:red;">`r date_periode_act`</span> .La période d'analyse trimensuelle va de 
+<span style="color:red;">`r date_periode_prec_trim`</span> à
+<span style="color:red;">`r date_periode_act`</span> . La période d'analyse annuelle va de 
+<span style="color:red;">`r date_periode_prec_year`</span> à
+<span style="color:red;">`r date_periode_act`</span> .
 
 L'analyse des réponses à la section 15, considère le mois de <span style="color:red;">`r month_ref_lab`</span> du <span style="color:red;">Bimestre `r bim_ref`</span> du <span style="color:red;">Trimestre `r quarter_ref`</span> de l'année <span style="color:red;">`r year_ref`</span> comme référence pour les réponses en cours.
 
@@ -500,7 +510,7 @@ summary_alert_by_region_mois<-df_alerte%>%
   mutate(mois = format(date_incident, "%B"), 
         mois_num     = month(date_incident),
          annee_alerte=year(date_incident))%>%
-  group_by(annee_alerte,mois_num,mois,type_crise)%>%
+  group_by(annee_alerte,mois_num,mois,region_arrivee)%>%
   arrange(annee_alerte,mois_num)%>%
   summarise(
     nb_alerts=sum(statut_alerte=="Validée",na.rm = T),
@@ -525,7 +535,7 @@ summary_alert_by_region_mois %>%
 ```{r alert_modality_mois, echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_mois <-df_rrm%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_month&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_mois <-df_rrm_for_analysis_mois%>%
@@ -820,7 +830,7 @@ summary_alert_by_region_mois<-df_alerte_vivres%>%
   mutate(mois = format(date_incident, "%B"), 
         mois_num     = month(date_incident),
          annee_alerte=year(date_incident))%>%
-  group_by(annee_alerte,mois_num,mois,type_crise)%>%
+  group_by(annee_alerte,mois_num,mois,region_arrivee)%>%
   arrange(annee_alerte,mois_num)%>%
   summarise(
     nb_alerts=sum(statut_alerte=="Validée",na.rm = T),
@@ -845,7 +855,7 @@ summary_alert_by_region_mois %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_mois <-df_rrm_vivres%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_month&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_mois <-df_rrm_for_analysis_mois%>%
@@ -1139,7 +1149,7 @@ summary_alert_by_region_mois<-df_alerte_nutrition%>%
   mutate(mois = format(date_incident, "%B"), 
         mois_num     = month(date_incident),
          annee_alerte=year(date_incident))%>%
-  group_by(annee_alerte,mois_num,mois,type_crise)%>%
+  group_by(annee_alerte,mois_num,mois,region_arrivee)%>%
   arrange(annee_alerte,mois_num)%>%
   summarise(
     nb_alerts=sum(statut_alerte=="Validée",na.rm = T),
@@ -1164,7 +1174,7 @@ summary_alert_by_region_mois %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_mois <-df_rrm_nutrition%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_month&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_mois <-df_rrm_for_analysis_mois%>%
@@ -1456,7 +1466,7 @@ summary_alert_by_region_mois<-df_alerte_eha%>%
   mutate(mois = format(date_incident, "%B"), 
         mois_num     = month(date_incident),
          annee_alerte=year(date_incident))%>%
-  group_by(annee_alerte,mois_num,mois,type_crise)%>%
+  group_by(annee_alerte,mois_num,mois,region_arrivee)%>%
   arrange(annee_alerte,mois_num)%>%
   summarise(
     nb_alerts=sum(statut_alerte=="Validée",na.rm = T),
@@ -1481,7 +1491,7 @@ summary_alert_by_region_mois %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_mois <-df_rrm_eha%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_month&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_mois <-df_rrm_for_analysis_mois%>%
@@ -1773,7 +1783,7 @@ summary_alert_by_region_mois<-df_alerte_abris%>%
   mutate(mois = format(date_incident, "%B"), 
         mois_num     = month(date_incident),
          annee_alerte=year(date_incident))%>%
-  group_by(annee_alerte,mois_num,mois,type_crise)%>%
+  group_by(annee_alerte,mois_num,mois,region_arrivee)%>%
   arrange(annee_alerte,mois_num)%>%
   summarise(
     nb_alerts=sum(statut_alerte=="Validée",na.rm = T),
@@ -1798,7 +1808,7 @@ summary_alert_by_region_mois %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_mois <-df_rrm_abris%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_month&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_mois <-df_rrm_for_analysis_mois%>%
@@ -2090,7 +2100,7 @@ summary_alert_by_region_mois<-df_alerte_bna%>%
   mutate(mois = format(date_incident, "%B"), 
         mois_num     = month(date_incident),
          annee_alerte=year(date_incident))%>%
-  group_by(annee_alerte,mois_num,mois,type_crise)%>%
+  group_by(annee_alerte,mois_num,mois,region_arrivee)%>%
   arrange(annee_alerte,mois_num)%>%
   summarise(
     nb_alerts=sum(statut_alerte=="Validée",na.rm = T),
@@ -2115,7 +2125,7 @@ summary_alert_by_region_mois %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_mois <-df_rrm_bna%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_month&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_mois <-df_rrm_for_analysis_mois%>%
@@ -2406,7 +2416,7 @@ summary_alert_by_region_mois<-df_alerte_education%>%
   mutate(mois = format(date_incident, "%B"), 
         mois_num     = month(date_incident),
          annee_alerte=year(date_incident))%>%
-  group_by(annee_alerte,mois_num,mois,type_crise)%>%
+  group_by(annee_alerte,mois_num,mois,region_arrivee)%>%
   arrange(annee_alerte,mois_num)%>%
   summarise(
     nb_alerts=sum(statut_alerte=="Validée",na.rm = T),
@@ -2431,7 +2441,7 @@ summary_alert_by_region_mois %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_mois <-df_rrm_education%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_month&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_mois <-df_rrm_for_analysis_mois%>%
@@ -2726,7 +2736,7 @@ summary_alert_by_region_mois<-df_alerte_sante%>%
   mutate(mois = format(date_incident, "%B"), 
         mois_num     = month(date_incident),
          annee_alerte=year(date_incident))%>%
-  group_by(annee_alerte,mois_num,mois,type_crise)%>%
+  group_by(annee_alerte,mois_num,mois,region_arrivee)%>%
   arrange(annee_alerte,mois_num)%>%
   summarise(
     nb_alerts=sum(statut_alerte=="Validée",na.rm = T),
@@ -2751,7 +2761,7 @@ summary_alert_by_region_mois %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_mois <-df_rrm_sante%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_month&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_mois <-df_rrm_for_analysis_mois%>%
@@ -3043,7 +3053,7 @@ summary_alert_by_region_mois<-df_alerte_protection%>%
   mutate(mois = format(date_incident, "%B"), 
         mois_num     = month(date_incident),
          annee_alerte=year(date_incident))%>%
-  group_by(annee_alerte,mois_num,mois,type_crise)%>%
+  group_by(annee_alerte,mois_num,mois,region_arrivee)%>%
   arrange(annee_alerte,mois_num)%>%
   summarise(
     nb_alerts=sum(statut_alerte=="Validée",na.rm = T),
@@ -3068,7 +3078,7 @@ summary_alert_by_region_mois %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_mois <-df_rrm_protection%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_month&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_mois <-df_rrm_for_analysis_mois%>%
@@ -3360,7 +3370,7 @@ summary_alert_by_region_mois<-df_alerte_mhm%>%
   mutate(mois = format(date_incident, "%B"), 
         mois_num     = month(date_incident),
          annee_alerte=year(date_incident))%>%
-  group_by(annee_alerte,mois_num,mois,type_crise)%>%
+  group_by(annee_alerte,mois_num,mois,region_arrivee)%>%
   arrange(annee_alerte,mois_num)%>%
   summarise(
     nb_alerts=sum(statut_alerte=="Validée",na.rm = T),
@@ -3385,7 +3395,7 @@ summary_alert_by_region_mois %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_mois <-df_rrm_mhm%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_month&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_mois <-df_rrm_for_analysis_mois%>%
@@ -3699,7 +3709,7 @@ summary_alert_by_region_bim %>%
 ```{r alert_modality_bim, echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_bim <-df_rrm%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_bim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_bim <-df_rrm_for_analysis_bim%>%
@@ -3997,7 +4007,7 @@ summary_alert_by_region_bim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_bim <-df_rrm_vivres%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_bim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_bim <-df_rrm_for_analysis_bim%>%
@@ -4298,7 +4308,7 @@ summary_alert_by_region_bim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_bim <-df_rrm_nutrition%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_bim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_bim <-df_rrm_for_analysis_bim%>%
@@ -4597,7 +4607,7 @@ summary_alert_by_region_bim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_bim <-df_rrm_eha%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_bim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_bim <-df_rrm_for_analysis_bim%>%
@@ -4896,7 +4906,7 @@ summary_alert_by_region_bim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_bim <-df_rrm_abris%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_bim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_bim <-df_rrm_for_analysis_bim%>%
@@ -5195,7 +5205,7 @@ summary_alert_by_region_bim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_bim <-df_rrm_bna%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_bim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_bim <-df_rrm_for_analysis_bim%>%
@@ -5493,7 +5503,7 @@ summary_alert_by_region_bim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_bim <-df_rrm_education%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_bim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_bim <-df_rrm_for_analysis_bim%>%
@@ -5795,7 +5805,7 @@ summary_alert_by_region_bim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_bim <-df_rrm_sante%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_bim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_bim <-df_rrm_for_analysis_bim%>%
@@ -6094,7 +6104,7 @@ summary_alert_by_region_bim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_bim <-df_rrm_protection%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_bim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_bim <-df_rrm_for_analysis_bim%>%
@@ -6393,7 +6403,7 @@ summary_alert_by_region_bim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_bim <-df_rrm_mhm%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_bim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_bim <-df_rrm_for_analysis_bim%>%
@@ -6697,7 +6707,7 @@ summary_alert_by_region_trim %>%
 ```{r alert_modality_trim, echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_trim <-df_rrm%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_trim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_trim <-df_rrm_for_analysis_trim%>%
@@ -6995,7 +7005,7 @@ summary_alert_by_region_trim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_trim <-df_rrm_vivres%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_trim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_trim <-df_rrm_for_analysis_trim%>%
@@ -7296,7 +7306,7 @@ summary_alert_by_region_trim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_trim <-df_rrm_nutrition%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_trim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_trim <-df_rrm_for_analysis_trim%>%
@@ -7595,7 +7605,7 @@ summary_alert_by_region_trim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_trim <-df_rrm_eha%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_trim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_trim <-df_rrm_for_analysis_trim%>%
@@ -7894,7 +7904,7 @@ summary_alert_by_region_trim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_trim <-df_rrm_abris%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_trim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_trim <-df_rrm_for_analysis_trim%>%
@@ -8193,7 +8203,7 @@ summary_alert_by_region_trim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_trim <-df_rrm_bna%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_trim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_trim <-df_rrm_for_analysis_trim%>%
@@ -8491,7 +8501,7 @@ summary_alert_by_region_trim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_trim <-df_rrm_education%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_trim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_trim <-df_rrm_for_analysis_trim%>%
@@ -8793,7 +8803,7 @@ summary_alert_by_region_trim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_trim <-df_rrm_sante%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_trim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_trim <-df_rrm_for_analysis_trim%>%
@@ -9092,7 +9102,7 @@ summary_alert_by_region_trim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_trim <-df_rrm_protection%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_trim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_trim <-df_rrm_for_analysis_trim%>%
@@ -9391,7 +9401,7 @@ summary_alert_by_region_trim %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_trim <-df_rrm_mhm%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_trim&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_trim <-df_rrm_for_analysis_trim%>%
@@ -9696,7 +9706,7 @@ summary_alert_by_region_ann %>%
 ```{r alert_modality_ann, echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_ann <-df_rrm%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_year&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_ann <-df_rrm_for_analysis_ann%>%
@@ -9993,7 +10003,7 @@ summary_alert_by_region_ann %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_ann <-df_rrm_vivres%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_year&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_ann <-df_rrm_for_analysis_ann%>%
@@ -10293,7 +10303,7 @@ summary_alert_by_region_ann %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_ann <-df_rrm_nutrition%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_year&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_ann <-df_rrm_for_analysis_ann%>%
@@ -10591,7 +10601,7 @@ summary_alert_by_region_ann %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_ann <-df_rrm_eha%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_year&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_ann <-df_rrm_for_analysis_ann%>%
@@ -10889,7 +10899,7 @@ summary_alert_by_region_ann %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_ann <-df_rrm_abris%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_year&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_ann <-df_rrm_for_analysis_ann%>%
@@ -11187,7 +11197,7 @@ summary_alert_by_region_ann %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_ann <-df_rrm_bna%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_year&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_ann <-df_rrm_for_analysis_ann%>%
@@ -11484,7 +11494,7 @@ summary_alert_by_region_ann %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_ann <-df_rrm_education%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_year&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_ann <-df_rrm_for_analysis_ann%>%
@@ -11785,7 +11795,7 @@ summary_alert_by_region_ann %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_ann <-df_rrm_sante%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_year&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_ann <-df_rrm_for_analysis_ann%>%
@@ -12083,7 +12093,7 @@ summary_alert_by_region_ann %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_ann <-df_rrm_protection%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_year&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_ann <-df_rrm_for_analysis_ann%>%
@@ -12381,7 +12391,7 @@ summary_alert_by_region_ann %>%
 ```{r , echo=FALSE, message=FALSE, warning=FALSE }
 
 df_rrm_for_analysis_ann <-df_rrm_mhm%>%
-  filter(date_fin_reponse>=date_periode_prec&date_fin_reponse<=date_periode_act)
+  filter(date_fin_reponse>=date_periode_prec_year&date_fin_reponse<=date_periode_act)
 
 
 summary_reponse_by_modalite_ann <-df_rrm_for_analysis_ann%>%
